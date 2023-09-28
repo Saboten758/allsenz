@@ -8,6 +8,7 @@ const App = () => {
   const [ambi, setAmbi] = useState(0)
   const [ori,setOri]=useState(0)
   const [temp,settemp]=useState(0)
+  const [linx,setLinx]=useState({x:0,y:0,z:0})
   const [accelerometer, setAccelerometer] = useState({x:0,y:0,z:0})
   const [magno, setmagno] = useState({x:0,y:0,z:0})
   useEffect(() => {
@@ -116,6 +117,23 @@ const App = () => {
       
     })
 
+    isSensorAvailable('linearAcceleration').then((available) => {
+      if (available) {
+        start('linearAcceleration').then(() => {
+          console.log('linearAcceleration sensor started')
+          onSensorChanged('LinearAccelerationData', (data) => {
+            setLinx(data)
+          })
+        }
+        )
+      }
+      else{
+        console.log("no linearAcceleration:<")
+      }
+
+      
+    })
+
     return () => {
       
       stop('proximity')
@@ -142,6 +160,10 @@ const App = () => {
     <View style={styles.container}>
       <Text style={styles.head}>ALL SENNSORS RISHAV DADA JINDABAD !</Text>
       <Text>Proximity: {proximity}</Text>
+      <Text>Linear Acceleration:  </Text>
+        <Text>{linx.x.toFixed(3)} </Text>
+        <Text>{linx.y.toFixed(3)}</Text>
+        <Text>{linx.z.toFixed(3)}</Text>
       <View style={{flexDirection:'row',alignItems:'center',margin:5}}>
         
         <View style={{alignItems:'center'}}>
