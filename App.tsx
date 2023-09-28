@@ -8,9 +8,12 @@ const App = () => {
   const [ambi, setAmbi] = useState(0)
   const [ori,setOri]=useState(0)
   const [temp,settemp]=useState(0)
+  const [press,setPress]=useState(0)
   const [linx,setLinx]=useState({x:0,y:0,z:0})
   const [accelerometer, setAccelerometer] = useState({x:0,y:0,z:0})
   const [magno, setmagno] = useState({x:0,y:0,z:0})
+  const [grav,setGrav]=useState({z:0,y:0,x:0})
+  const [gyro,setGyro]=useState({z:0,y:0,x:0})
   useEffect(() => {
     isSensorAvailable('proximity').then((available) => {
       if (available) {
@@ -134,6 +137,40 @@ const App = () => {
       
     })
 
+    isSensorAvailable('gravity').then((available) => {
+      if (available) {
+        start('gravity').then(() => {
+          console.log('gravity sensor started')
+          onSensorChanged('GravityData', (data) => {
+            setGrav(data)
+          })
+        }
+        )
+      }
+      else{
+        console.log("no Gravity:<")
+      }
+
+      
+    })
+
+    isSensorAvailable('pressure').then((available) => {
+      if (available) {
+        start('pressure').then(() => {
+          console.log('pressure sensor started')
+          onSensorChanged('PressureData', (data) => {
+            setPress(data)
+          })
+        }
+        )
+      }
+      else{
+        console.log("no Pressure:<")
+      }
+
+      
+    })
+
     return () => {
       
       stop('proximity')
@@ -143,6 +180,9 @@ const App = () => {
       stop('orientation')
       stop('temperature')
       stop('magneticField')
+      stop('linearAcceleration')
+      stop('gravity')
+      stop('pressure')
     }
   }
   , [but])
@@ -155,15 +195,34 @@ const App = () => {
       removeSensorListener('OrientationData')
       removeSensorListener('ProximityData')
       removeSensorListener('MagneticFieldData')
+      removeSensorListener('LinearAccelerationData')
+      removeSensorListener('GravityData')
+      removeSensorListener('PressureData')
   }
   return (
     <View style={styles.container}>
       <Text style={styles.head}>ALL SENNSORS RISHAV DADA JINDABAD !</Text>
       <Text>Proximity: {proximity}</Text>
-      <Text>Linear Acceleration:  </Text>
+      <Text>Pressure: {press}</Text>
+      <View style={{flexDirection:'row',alignItems:'center',margin:5}}>
+        
+        <View style={{alignItems:'center'}}>
+        <Text>Linear Accel:</Text>
         <Text>{linx.x.toFixed(3)} </Text>
         <Text>{linx.y.toFixed(3)}</Text>
         <Text>{linx.z.toFixed(3)}</Text>
+        </View>
+        <View style={{alignItems:'center',marginStart:10}}>
+        <Text>Gravity:</Text>
+        <Text>{grav.x.toFixed(3)} </Text>
+        <Text>{grav.y.toFixed(3)} </Text>
+        <Text>{grav.z.toFixed(3)} </Text>
+        </View>
+        
+      </View>
+
+
+      
       <View style={{flexDirection:'row',alignItems:'center',margin:5}}>
         
         <View style={{alignItems:'center'}}>
