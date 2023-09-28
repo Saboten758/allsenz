@@ -219,7 +219,7 @@ const App = () => {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.head}>ALL SENNSORS DEMO APP !</Text>
+      <Text style={styles.head}>ALL SENSORS DEMO APP !</Text>
       <Text>Proximity: {proximity}</Text>
       <Text>Pressure: {press}</Text>
       <View style={{flexDirection:'row',alignItems:'center',margin:5}}>
