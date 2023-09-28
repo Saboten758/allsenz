@@ -14,6 +14,8 @@ const App = () => {
   const [magno, setmagno] = useState({x:0,y:0,z:0})
   const [grav,setGrav]=useState({z:0,y:0,x:0})
   const [gyro,setGyro]=useState({z:0,y:0,x:0})
+  const [rotvec,setRotvec]=useState({z:0,y:0,x:0})
+
   useEffect(() => {
     isSensorAvailable('proximity').then((available) => {
       if (available) {
@@ -187,6 +189,25 @@ const App = () => {
 
       
     })
+
+    isSensorAvailable('rotationVector').then((available) => {
+      if (available) {
+        start('rotationVector').then(() => {
+          console.log('rotationVector sensor started')
+          onSensorChanged('RotationVectorData', (data) => {
+            setRotvec(data)
+          })
+        }
+        )
+      }
+      else{
+        console.log("no RotationVector:<")
+      }
+
+      
+    })
+
+
     return () => {
       
       stop('proximity')
@@ -200,6 +221,7 @@ const App = () => {
       stop('gravity')
       stop('pressure')
       stop('gyroscope')
+      stop('rotationVector')
     }
   }
   , [but])
@@ -216,6 +238,7 @@ const App = () => {
       removeSensorListener('GravityData')
       removeSensorListener('PressureData')
       removeSensorListener('GyroscopeData')
+      removeSensorListener('RotationVectorData')
   }
   return (
     <View style={styles.container}>
@@ -231,7 +254,7 @@ const App = () => {
         <Text>{linx.z.toFixed(3)}</Text>
         </View>
         <View style={{alignItems:'center',marginStart:10}}>
-        <Text>Gravity:</Text>
+        <Text>Gyroscope:</Text>
         <Text>{gyro.x.toFixed(3)} </Text>
         <Text>{gyro.y.toFixed(3)} </Text>
         <Text>{gyro.z.toFixed(3)} </Text>
@@ -257,10 +280,26 @@ const App = () => {
         </View>
         
       </View>
-      <Text>Gyroscope:</Text>
+
+      <View style={{flexDirection:'row',alignItems:'center',margin:5}}>
+        
+        <View style={{alignItems:'center'}}>
+        <Text>Gravity:</Text>
         <Text>{grav.x.toFixed(3)} </Text>
         <Text>{grav.y.toFixed(3)} </Text>
         <Text>{grav.z.toFixed(3)} </Text>
+        </View>
+        <View style={{alignItems:'center',marginStart:10}}>
+        <Text>Roatation</Text>
+        <Text>{rotvec.x.toFixed(3)} </Text>
+        <Text>{rotvec.y.toFixed(3)} </Text>
+        <Text>{rotvec.z.toFixed(3)} </Text>
+        </View>
+        
+      </View>
+
+
+      
       <Text>Light: {light}</Text>
       <Text>Ambient Temp: {ambi}</Text>
       <Text>Temperature: {temp}</Text>
