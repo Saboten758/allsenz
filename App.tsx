@@ -9,6 +9,7 @@ const App = () => {
   const [ori,setOri]=useState(0)
   const [temp,settemp]=useState(0)
   const [accelerometer, setAccelerometer] = useState({x:0,y:0,z:0})
+  const [magno, setmagno] = useState({x:0,y:0,z:0})
   useEffect(() => {
     isSensorAvailable('proximity').then((available) => {
       if (available) {
@@ -20,6 +21,9 @@ const App = () => {
         }
         )
       }
+      else{
+        console.log("no proximity:<")
+      }
     })
     isSensorAvailable('accelerometer').then((available) => {
       if (available) {
@@ -30,6 +34,9 @@ const App = () => {
           })
         }
         )
+      }
+      else{
+        console.log("no accel:<")
       }
     })
 
@@ -96,15 +103,17 @@ const App = () => {
       if (available) {
         start('magneticField').then(() => {
           console.log('magneticField sensor started')
-          onSensorChanged('magneticFieldData', (data) => {
-            settemp(data)
+          onSensorChanged('MagneticFieldData', (data) => {
+            setmagno(data)
           })
         }
         )
       }
       else{
-        console.log("no temp:<")
+        console.log("no magneticfield:<")
       }
+
+      
     })
 
     return () => {
@@ -114,7 +123,8 @@ const App = () => {
       stop('light')
       stop('ambientTemperature')
       stop('orientation')
-
+      stop('temperature')
+      stop('magneticField')
     }
   }
   , [but])
@@ -122,22 +132,36 @@ const App = () => {
   const rem=()=>{
       removeSensorListener('AccelerometerData')
       removeSensorListener('LightData')
-      removeSensorListener('AmbientTemperature')
-      removeSensorListener('AmbientTemperature')
+      removeSensorListener('AmbientTemperatureData')
+      removeSensorListener('TemperatureData')
       removeSensorListener('OrientationData')
       removeSensorListener('ProximityData')
+      removeSensorListener('MagneticFieldData')
   }
   return (
     <View style={styles.container}>
       <Text style={styles.head}>ALL SENNSORS RISHAV DADA JINDABAD !</Text>
       <Text>Proximity: {proximity}</Text>
-      <Text>Accelerometer:</Text>
-      <Text>{accelerometer.x.toFixed(3)} </Text>
-      <Text>{accelerometer.y.toFixed(3)} </Text>
-      <Text>{accelerometer.z.toFixed(3)} </Text>
+      <View style={{flexDirection:'row',alignItems:'center',margin:5}}>
+        
+        <View style={{alignItems:'center'}}>
+        <Text>Accelerometer:</Text>
+        <Text>{accelerometer.x.toFixed(3)} </Text>
+        <Text>{accelerometer.y.toFixed(3)} </Text>
+        <Text>{accelerometer.z.toFixed(3)} </Text>
+        </View>
+        <View style={{alignItems:'center',marginStart:10}}>
+        <Text>MagneticField:</Text>
+        <Text>{magno.x.toFixed(3)} </Text>
+        <Text>{magno.y.toFixed(3)} </Text>
+        <Text>{magno.z.toFixed(3)} </Text>
+        </View>
+        
+      </View>
+      
       <Text>Light: {light}</Text>
       <Text>Ambient Temp: {ambi}</Text>
-      <Text>Temperature: {temp.toFixed(3)}</Text>
+      <Text>Temperature: {temp}</Text>
       <Text>Orientation: {ori.toFixed(3)}</Text>
       <View style={{flexDirection:'row'}}>
       <TouchableHighlight style={styles.button}onPress={()=>{setBut(!but)}}><Text style={styles.buttonText}>Start</Text></TouchableHighlight>
