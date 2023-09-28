@@ -171,6 +171,22 @@ const App = () => {
       
     })
 
+    isSensorAvailable('gyroscope').then((available) => {
+      if (available) {
+        start('gyroscope').then(() => {
+          console.log('gyroscope sensor started')
+          onSensorChanged('GyroscopeData', (data) => {
+            setGyro(data)
+          })
+        }
+        )
+      }
+      else{
+        console.log("no Gyro:<")
+      }
+
+      
+    })
     return () => {
       
       stop('proximity')
@@ -183,6 +199,7 @@ const App = () => {
       stop('linearAcceleration')
       stop('gravity')
       stop('pressure')
+      stop('gyroscope')
     }
   }
   , [but])
@@ -198,10 +215,11 @@ const App = () => {
       removeSensorListener('LinearAccelerationData')
       removeSensorListener('GravityData')
       removeSensorListener('PressureData')
+      removeSensorListener('GyroscopeData')
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.head}>ALL SENNSORS RISHAV DADA JINDABAD !</Text>
+      <Text style={styles.head}>ALL SENNSORS DEMO APP !</Text>
       <Text>Proximity: {proximity}</Text>
       <Text>Pressure: {press}</Text>
       <View style={{flexDirection:'row',alignItems:'center',margin:5}}>
@@ -214,13 +232,13 @@ const App = () => {
         </View>
         <View style={{alignItems:'center',marginStart:10}}>
         <Text>Gravity:</Text>
-        <Text>{grav.x.toFixed(3)} </Text>
-        <Text>{grav.y.toFixed(3)} </Text>
-        <Text>{grav.z.toFixed(3)} </Text>
+        <Text>{gyro.x.toFixed(3)} </Text>
+        <Text>{gyro.y.toFixed(3)} </Text>
+        <Text>{gyro.z.toFixed(3)} </Text>
         </View>
         
       </View>
-
+      
 
       
       <View style={{flexDirection:'row',alignItems:'center',margin:5}}>
@@ -239,7 +257,10 @@ const App = () => {
         </View>
         
       </View>
-      
+      <Text>Gyroscope:</Text>
+        <Text>{grav.x.toFixed(3)} </Text>
+        <Text>{grav.y.toFixed(3)} </Text>
+        <Text>{grav.z.toFixed(3)} </Text>
       <Text>Light: {light}</Text>
       <Text>Ambient Temp: {ambi}</Text>
       <Text>Temperature: {temp}</Text>
