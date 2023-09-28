@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native'
+import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
 import React,{useState,useEffect} from 'react'
 import {start, stop, isSensorAvailable,onSensorChanged, removeSensorListener} from 'react-native-all-sensors'
 const App = () => {
@@ -305,8 +305,8 @@ const App = () => {
       <Text>Temperature: {temp}</Text>
       <Text>Orientation: {ori.toFixed(3)}</Text>
       <View style={{flexDirection:'row'}}>
-      <TouchableHighlight style={styles.button}onPress={()=>{setBut(!but)}}><Text style={styles.buttonText}>Start</Text></TouchableHighlight>
-      <TouchableHighlight style={[styles.button,{backgroundColor:'red'}]} onPress={rem}><Text style={[styles.buttonText,{color:"black"}]}>Stop</Text></TouchableHighlight>
+      <TouchableOpacity style={styles.button}onPress={()=>{setBut(!but)}}><Text style={styles.buttonText}>Start</Text></TouchableOpacity>
+      <TouchableOpacity style={[styles.button,{backgroundColor:'red'}]} onPress={rem}><Text style={[styles.buttonText,{color:"black"}]}>Stop</Text></TouchableOpacity>
       </View>
       
     </View>
